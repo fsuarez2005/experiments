@@ -31,21 +31,29 @@ class Server:
     def __init__(self):
         self.port = 8881
         
-        pass
-        
     def create_socket(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         
     def set_socket_options(self):
         # Ensure that you can restart your server quickly when it terminates
-        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 
     def bind_to_port(self):
-        self.sock.bind(('', well_known_port))
+        self.sock.bind(('', self.port))
 
     def set_as_listen(self):
         self.sock.listen(5)
+
+    def setup(self):
+        self.create_socket()
+        self.set_socket_options()
+        self.bind_to_port()
+        self.set_as_listen()
+        
+    def get_data(self):
+        return ""
+        
 
     def run(self):
         # loop waiting for connections (terminate with Ctrl-C)
@@ -53,13 +61,21 @@ class Server:
             while 1:
                 newSocket, address = self.sock.accept(  )
                 print("Connected from", address)
-                # loop serving the new client
-                while 1:
-                    receivedData = newSocket.recv(1024)
-                    if not receivedData: break
-                    # Echo back the same data you just received
-                    newSocket.send(receivedData)
+                # web
+                
+                newSocket.recv(5)
+                
+                
+                
+                newSocket.send(b"HTTP/1.1 200 OK\nContent-Type: text/plain\n\nhello")
                 newSocket.close(  )
                 print("Disconnected from", address)
         finally:
             self.sock.close(  )
+            
+            
+s = Server()
+s.setup()
+s.run()
+
+
