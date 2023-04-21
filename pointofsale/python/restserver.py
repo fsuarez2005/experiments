@@ -61,12 +61,16 @@ class Server:
             while 1:
                 newSocket, address = self.sock.accept(  )
                 print("Connected from", address)
-                # web
+                # get HTTP request
+                header = ""
+                while True:
                 
-                newSocket.recv(5)
+                    header = newSocket.recv(1024)
+                    print(header.decode())
                 
                 
                 
+                print("Sending data to client")
                 newSocket.send(b"HTTP/1.1 200 OK\nContent-Type: text/plain\n\nhello")
                 newSocket.close(  )
                 print("Disconnected from", address)
