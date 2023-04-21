@@ -23,19 +23,30 @@ class RESTResource:
 
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        message = "Hello!"
+        message = "message:  "
+        
+        
+        path_array = self.path.split('/')
+        
+        # get resource using path
+        message += str(self.server.parent.root.resources[path_array])
+        
+        
+        
+        
+        match path_array[1]:
+            case "":
+                message += "root" 
+            case _:
+                pass
+        
+        
 
         self.protocol_version = "HTTP/1.1"
         self.send_response(200)
         self.send_header("Content-Length", len(message))
         self.end_headers()
         
-        # parse path
-        path_array = self.path.split('/')
-        
-        #print(self.path)
-        print(self.server.parent)
-
         self.wfile.write(bytes(message, "utf8"))
         return
 
@@ -71,15 +82,12 @@ class Server:
 
     def setup_resources(self):
         self.root = RESTResource()
-        
-
-
+        self.root.append_resource('objects',RESTResource())
 
     def setup(self):
         self.server = (self.hostname,self.port)
         self.httpd = HTTPServer(self.server, RequestHandler)
         self.httpd.parent = self
-
 
     def run(self):
         # loop waiting for connections (terminate with Ctrl-C)
@@ -87,6 +95,7 @@ class Server:
 
             
 s = Server()
+s.setup_resources()
 s.setup()
 s.run()
 
