@@ -3,6 +3,43 @@
 import socket
 import sqlite3
 
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+
+# resources are nested containers 
+class RESTResource:
+    # resources are mapped using a Dict
+    
+    def __init__(self):
+        self.resources = {}
+    
+    def get_resources(self):
+        return self.resources.keys()
+        
+    def append_resource(self,name,resource):
+        self.resources[name] = resource
+        
+
+
+class RequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        message = "Hello!"
+
+        self.protocol_version = "HTTP/1.1"
+        self.send_response(200)
+        self.send_header("Content-Length", len(message))
+        self.end_headers()
+        
+        # parse path
+        path_array = self.path.split('/')
+        
+        #print(self.path)
+        print(self.server.parent)
+
+        self.wfile.write(bytes(message, "utf8"))
+        return
+
+
 class Database:
     
     
@@ -26,57 +63,28 @@ class Database:
     pass
     
     
-    
+# uses http.server with a custom HTTPRequestHandler
 class Server:
     def __init__(self):
-        self.port = 8881
+        self.hostname = ''
+        self.port = 8881 
+
+    def setup_resources(self):
+        self.root = RESTResource()
         
-    def create_socket(self):
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        
-    def set_socket_options(self):
-        # Ensure that you can restart your server quickly when it terminates
-        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 
-    def bind_to_port(self):
-        self.sock.bind(('', self.port))
-
-    def set_as_listen(self):
-        self.sock.listen(5)
 
     def setup(self):
-        self.create_socket()
-        self.set_socket_options()
-        self.bind_to_port()
-        self.set_as_listen()
-        
-    def get_data(self):
-        return ""
-        
+        self.server = (self.hostname,self.port)
+        self.httpd = HTTPServer(self.server, RequestHandler)
+        self.httpd.parent = self
+
 
     def run(self):
         # loop waiting for connections (terminate with Ctrl-C)
-        try:
-            while 1:
-                newSocket, address = self.sock.accept(  )
-                print("Connected from", address)
-                # get HTTP request
-                header = ""
-                while True:
-                
-                    header = newSocket.recv(1024)
-                    print(header.decode())
-                
-                
-                
-                print("Sending data to client")
-                newSocket.send(b"HTTP/1.1 200 OK\nContent-Type: text/plain\n\nhello")
-                newSocket.close(  )
-                print("Disconnected from", address)
-        finally:
-            self.sock.close(  )
-            
+        self.httpd.serve_forever()
+
             
 s = Server()
 s.setup()
