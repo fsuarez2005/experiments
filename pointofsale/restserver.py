@@ -4,41 +4,88 @@ import socket
 import sqlite3
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import urlparse
+
+index_file = """<!DOCTYPE html>
+<html>
+</html>
+
+
+
+"""
+
+
+
+
+object_list = """<?xml version="1.0" encoding="UTF-8"?>
+<objects>
+    <object name="banana" plu="4022" />
+</objects>"""
 
 
 # resources are nested containers 
 class RESTResource:
     # resources are mapped using a Dict
     
-    def __init__(self):
+    def __init__(self,name=None):
         self.resources = {}
+        
+        if name is not None:
+            self.name = name
+
     
-    def get_resources(self):
-        return self.resources.keys()
+    # the following defined on object instantiation ==========
+    
+    #def __getitem__(self,key)
+    #def __setitem__(self,key,value)
+    #def __delitem__(self,key)
+    #def __missing__(self,key)
+    #def __iter__(self)
+    #def __reversed__(self)
+    #def __contains__(self,item)
+    #def keys(self):
+
+    # ========================================================
+    
+    
         
     def append_resource(self,name,resource):
         self.resources[name] = resource
         
 
+# creates a heirarchy of RESTResources
+def create_resources():
+    root = REST
+    pass
+
+
+
 
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        message = "message:  "
+        justpath = urlparse(self.path)
+        path_array = justpath.path.split('/')
         
         
-        path_array = self.path.split('/')
+        
+        message = ""
+        
+        
+        
         
         # get resource using path
-        message += str(self.server.parent.root.resources[path_array])
+        #message += str(self.server.parent.root.resources[path_array])
         
         
         
         
         match path_array[1]:
             case "":
-                message += "root" 
+                message += "root"
+            case "objects":
+                message += object_list
             case _:
-                pass
+                message += "incorrect path"
         
         
 
@@ -77,7 +124,7 @@ class Database:
 # uses http.server with a custom HTTPRequestHandler
 class Server:
     def __init__(self):
-        self.hostname = ''
+        self.hostname = 'localhost'
         self.port = 8881 
 
     def setup_resources(self):
@@ -90,13 +137,16 @@ class Server:
         self.httpd.parent = self
 
     def run(self):
+        print(f"Running server:  {self.hostname}:{self.port}...")
+        
         # loop waiting for connections (terminate with Ctrl-C)
         self.httpd.serve_forever()
 
-            
-s = Server()
-s.setup_resources()
-s.setup()
-s.run()
+def main():           
+    s = Server()
+    s.setup_resources()
+    s.setup()
+    s.run()
 
+main()
 
