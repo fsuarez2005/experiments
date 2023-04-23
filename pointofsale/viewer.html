@@ -1,12 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript">
+<script type="application/javascript">
+//<![CDATA[
+	function getfilecontents( path ) {
+		
+		
+		
+		
+		
+		
+	}
 	
+	function get_with_filereader( path, eventcallback ) {
+		var reader = new FileReader();
+		
+		
+		
+		
+	}
+
+	function get_with_xmlhttprequest( path ) {
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function () {
+			console.log('xhttp readystatechange');
+			
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				// data ready
+				alert('data is ready')
+			}
+		
+		}
+		xhttp.open("GET",path,true);
+		xhttp.send();
+		
+	}
+
+	function button_onclick() {
+		//alert('button click');
+		
+		// http://localhost:8881/objects
+		get_with_xmlhttprequest('http://localhost:8881/objects');
+		
+		
+	}
+
+
+
+//]] >
+</script>
 	
 	
 	
 </head>
 <body>
+	<input type="button" value="Load Data" onclick="button_onclick()">
+	
+	
+	
 </body>
 </html>
