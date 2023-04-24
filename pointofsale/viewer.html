@@ -3,31 +3,20 @@
 <head>
 <script type="application/javascript">
 //<![CDATA[
-	function getfilecontents( path ) {
-		
-		
-		
-		
-		
-		
-	}
-	
-	function get_with_filereader( path, eventcallback ) {
-		var reader = new FileReader();
-		
-		
-		
-		
-	}
 
+
+
+	// test function to check XMLHttpRequest
 	function get_with_xmlhttprequest( path ) {
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function () {
-			console.log('xhttp readystatechange');
+			console.log('xhttp readystatechange: status='+self.status+
+					' readyState='+self.readyState);
 			
 			if (xhttp.readyState == 4 && xhttp.status == 200) {
 				// data ready
-				alert('data is ready')
+				console.log('data is ready');
+				document.getElementById('output').innerHTML = xhttp.response;
 			}
 		
 		}
@@ -36,11 +25,18 @@
 		
 	}
 
+	// callback for test button
 	function button_onclick() {
 		//alert('button click');
 		
 		// http://localhost:8881/objects
 		get_with_xmlhttprequest('http://localhost:8881/objects');
+		
+		
+	}
+
+	function load_page( url ) {
+		get_with_xmlhttprequest(url);
 		
 		
 	}
@@ -54,7 +50,12 @@
 	
 </head>
 <body>
-	<input type="button" value="Load Data" onclick="button_onclick()">
+	<textarea id="output"></textarea>
+	<br />
+	
+	<input type="button" value="Root" onclick="load_page('http://localhost:8881/')">
+	<input type="button" value="Objects" onclick="load_page('http://localhost:8881/objects')">
+	
 	
 	
 	
