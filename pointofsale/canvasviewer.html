@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="application/javascript">
+// <![CDATA[
+
+
+	class RESTServerConnection {
+		hostname = 'localhost'
+		port = 8881
+		
+		constructor() {}
+		
+		build_url( path ) {
+			
+			//return "";
+			
+			
+			
+			return `http://${this.hostname}:${this.port}${path}`;
+		}
+		
+		
+		send_request( path ) {
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function () {
+				console.log('xhttp readystatechange: status='+self.status+
+						' readyState='+self.readyState);
+			
+				if (xhttp.readyState == 4 && xhttp.status == 200) {
+					// data ready
+					console.log('data is ready');
+					document.getElementById('output').innerHTML = xhttp.response;
+				}
+		
+			}
+			xhttp.open("GET",path,true);
+			xhttp.send();
+		}
+		
+		
+		
+		
+	}
+
+
+
+	// callback for test button
+	function button_onclick() {
+		//alert('button click');
+		
+		// http://localhost:8881/objects
+		get_with_xmlhttprequest('http://localhost:8881/objects');
+		
+		
+	}
+
+	function button_canvastest_onclick(){
+		var canvas = document.getElementById('canvas');
+		canvas2D = canvas.getContext('2d');
+		
+		// create test box
+		canvas2D.beginPath();
+		canvas2D.moveTo(0,0);
+		canvas2D.lineTo(50,10);
+		canvas2D.stroke();
+		
+		
+	}
+
+	function btn_loadfrompath_onclick() {
+		var x = new RESTServerConnection();
+		//console.log(x);
+		
+		url = x.build_url('/');
+		console.log(url);
+	}
+
+
+
+	function add_canvas_clicklistener() {
+		var canvas = document.getElementById('canvas');
+		
+		canvas.addEventListener('click', (e) => {
+			alert('x: '+e.offsetX+' y: '+e.offsetY);
+			
+			
+		});
+		
+	}
+	
+	
+	function create_gondola() {
+		//var canvas = document.ge
+		
+		
+		
+	}
+
+
+
+	function body_onload(){
+		add_canvas_clicklistener();
+		
+		
+	}
+
+
+    //]] >
+</script>
+	
+<style type="text/css" media="all">
+	#canvas {
+		border:1px solid black;
+		width:400px;
+	}	
+	
+	input[type=button] {
+		margin-top:5px;
+		margin-bottom:5px;
+		
+		
+		
+	}
+	
+	.controlsheader {
+		font-size: 20pt;
+		
+		
+		
+	}
+	
+</style>
+	
+</head>
+<body onload="body_onload()">
+	
+	<label class="controlsheader">Controls</label><br />
+	<hr />
+	<input type="text" id="pathinput" /><br />
+	<input type="button" value="Load from path" onclick="btn_loadfrompath_onclick()"><br />
+	<textarea id="pathtestoutput" style="width:400px"></textarea>
+	
+	
+	<hr />
+	
+	
+		
+	<input type="button" value="Canvas Test" onclick="button_canvastest_onclick()">
+	<br />
+	
+	
+	
+	
+	
+	
+	<!--
+		
+	Canvas coordinate system	
+		
+	0,0								x,0
+		
+		
+		
+		
+		
+		
+	0,y								x,y	
+		
+	-->
+	<canvas id="canvas"></canvas>
+	
+	
+	
+</body>
+</html>
