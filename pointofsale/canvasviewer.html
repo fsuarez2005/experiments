@@ -4,6 +4,20 @@
 <script type="application/javascript">
 // <![CDATA[
 
+	class Gondola {
+		#length = 0;
+		startPt = {x:0,y:0};
+		endPt = {x:0,y:0};
+		
+		#canvasCtx = 0;
+		
+		constructor() {}
+		
+		render() {
+			
+			
+		}
+	}
 
 	class RESTServerConnection {
 		hostname = 'localhost'
@@ -43,8 +57,6 @@
 		
 	}
 
-
-
 	// callback for test button
 	function button_onclick() {
 		//alert('button click');
@@ -76,8 +88,6 @@
 		console.log(url);
 	}
 
-
-
 	function add_canvas_clicklistener() {
 		var canvas = document.getElementById('canvas');
 		
@@ -89,16 +99,6 @@
 		
 	}
 	
-	
-	function create_gondola() {
-		//var canvas = document.ge
-		
-		
-		
-	}
-
-
-
 	function body_onload(){
 		add_canvas_clicklistener();
 		
