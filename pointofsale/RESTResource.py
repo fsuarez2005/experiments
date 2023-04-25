@@ -8,6 +8,17 @@ from urllib.parse import urlparse
 # * if resource is suffixed by a slash, treat resource as directory
 #   else treat resource as object
 
+# sample paths
+# * /
+#   - root path
+#   - will always be a slash
+#   - may treat as object or container
+#   - should display application or very general information about accessing resources
+# * /res
+#   - resource in root directory
+#   - treat as object
+# * /res/
+#   - treat as container
 
 # resources are nested containers
 # display depends on whether the container is viewed or the contents are viewed
@@ -15,12 +26,9 @@ class RESTResource:
     "Resources are mapped using a Dict."
     path_separator = '/'
     
-    
     def __init__(self):
         self.resources = {}
-        
         self.display_callback = None
-        
     
     def display(self):
         "Returns data to be sent to client."
