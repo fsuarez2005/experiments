@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script type="text/javascript">
 		
 		D = {
@@ -111,6 +113,16 @@
 			
 			o_testserial.addEventListener('keydown',evt_testserial_keydown);
 			
+			
+			
+			var o_diag = document.getElementById('diag');
+			
+			
+			o_diag.innerHTML += 'screen.height = '+screen.height+'\n';
+			
+			
+			
+			
 			_debughr();
 		}
 		
@@ -118,54 +130,60 @@
 		
 	</script>
 	<style type="text/css">
+		body {
+			width:100vw;
+			
+		}
+		
+		
 		.older {
 			background: red !important;
-			
-			
 		}
 		
 		.newer {
 			background: green !important;
-			
-			
-			
 		}
 		
 		
 		label {
 			display: inline-block;
-			width: 200px;
-			margin:10px;
+			width:100px;
+			margin-top: 5px;
+			margin-bottom: 5px;
 		}
 		
 		#userinputdiv, #outputdiv {
+			width: calc(80vw);
+			
+			display:inline-block;
+			padding:10px;
 			border: 1px solid black;
-			margin:5px;
+			margin-bottom:5px;
+			
 		}
+		
+
 		
 		#outputdiv {
 			background: gray;
 			color: white;
-			
-			
 		}
 		
 		
 	</style>	
 </head>
 <body onload="body_onload()">
-<h1>Battery Serial Number Checker</h1>
-<div id="userinputdiv">
-	<label>Reference</label><input type="text" id="refserial" /><br />
-	<label>Test</label><input type="text" id="testserial" /><br />
-</div>
 
-<div id="outputdiv">
-	<label>Output</label><span id="output"></span>
-</div>
+	<div id="userinputdiv">
+		<label>Reference</label><input type="text" id="refserial" /><br />
+		<label>Test</label><input type="text" id="testserial" /><br />
+	</div><br />
 
+	<div id="outputdiv">
+		<label>Output</label><span id="output"></span>
+	</div>
 
-
+<div id="diag"></div>
 
 </body>
 </html>
