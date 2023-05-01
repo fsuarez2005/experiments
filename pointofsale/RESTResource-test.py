@@ -58,6 +58,7 @@ def test_module():
     #test_dict_functions()
 
 if __name__ == "__main__":
+    breakpoint()
     test_module()
     
     test_traverse()

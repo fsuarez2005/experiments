@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript">
+		
+		D = {
+			TRACE: "TRACE",
+			DEBUG: "DEBUG",
+			INFO: "INFO",
+			WARN: "WARN",
+			ERROR: "ERROR",
+			FATAL: "FATAL"
+		}
+		
+		var categories = [];
+		function _debugprint( category, msg ) {
+			if (categories.includes(category)) {
+				console.log(category+": "+msg)
+			}
+		}
+		categories.push(
+			D.TRACE,
+			D.DEBUG,
+			D.INFO,
+			D.WARN,
+			D.ERROR,
+			D.FATAL
+		);
+		
+		function _debughr() {
+			console.log("===================================================");
+		}
+		
+		
+		var o_testserial;
+		var o_refserial;
+		var o_output;
+		
+		
+		function cmp( a, b ) {
+			_debugprint(D.TRACE,"cmp()")
+			
+			function bool2int(b){
+				if (b) {
+					return 1;
+				} else {
+					return 0;
+				}
+			}
+			return (bool2int(a > b) - bool2int(a < b));
+		}
+		
+		function cmp_serial( testserial, refserial ) {
+			testserial_base10 = parseInt( testserial, 36 );
+			refserial_base10 = parseInt( refserial, 36 );
+			
+			return cmp( testserial_base10, refserial_base10 );
+		}
+		
+		function evt_testserial_keydown(evt) {
+			_debughr();
+			_debugprint(D.TRACE,"evt_testserial_keydown()")
+			
+			_debugprint(D.DEBUG,'keydown: '+evt.key);
+			
+			if (evt.key == "Enter") {
+				// test serial number
+				var outputdiv = document.getElementById('outputdiv');
+				
+				
+				var cmp_result = cmp_serial(
+					o_testserial.value,
+					o_refserial.value
+				);
+				
+				if (cmp_result < 0) {
+					// older
+					outputdiv.setAttribute('class','older');
+					o_output.innerHTML = 'Older';
+					
+				} else if (cmp_result > 0) {
+					// newer
+					outputdiv.setAttribute('class','newer');
+					o_output.innerHTML = 'Newer';
+					
+				} else {
+					outputdiv.setAttribute('class','');
+					o_output.innerHTML = '';
+					
+				}
+				
+				
+				// clear text input
+				o_testserial.value = '';
+			}
+			
+			
+			
+			
+			
+			_debughr();
+		}
+		
+		function body_onload() {
+			_debughr();
+			_debugprint(D.TRACE,"body_onload()");
+			o_testserial = document.getElementById('testserial');
+			o_refserial = document.getElementById('refserial');
+			o_output = document.getElementById('output');
+			
+			
+			o_testserial.addEventListener('keydown',evt_testserial_keydown);
+			
+			_debughr();
+		}
+		
+		
+		
+	</script>
+	<style type="text/css">
+		.older {
+			background: red !important;
+			
+			
+		}
+		
+		.newer {
+			background: green !important;
+			
+			
+			
+		}
+		
+		
+		label {
+			display: inline-block;
+			width: 200px;
+			margin:10px;
+		}
+		
+		#userinputdiv, #outputdiv {
+			border: 1px solid black;
+			margin:5px;
+		}
+		
+		#outputdiv {
+			background: gray;
+			color: white;
+			
+			
+		}
+		
+		
+	</style>	
+</head>
+<body onload="body_onload()">
+<h1>Battery Serial Number Checker</h1>
+<div id="userinputdiv">
+	<label>Reference</label><input type="text" id="refserial" /><br />
+	<label>Test</label><input type="text" id="testserial" /><br />
+</div>
+
+<div id="outputdiv">
+	<label>Output</label><span id="output"></span>
+</div>
+
+
+
+
+</body>
+</html>
