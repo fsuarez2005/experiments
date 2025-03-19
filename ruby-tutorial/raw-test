@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+
+require 'io/console'
+
+def test1
+  con = IO.console
+  
+  con.raw!
+  
+  input = con.getch
+  p input
+  con.getch
+  `reset`
+  
+end
+
+
+def test2
+  con = IO.console
+  con.echo = false
+  
+  input = con.getch
+  puts "input = #{input}"
+  con.getch
+
+end
+test2

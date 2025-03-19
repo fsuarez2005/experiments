@@ -1,0 +1,113 @@
+#!/usr/bin/env ruby
+
+require 'io/console'
+
+module UI
+  class Screen
+    def initialize
+      @widgets = []
+    end
+    
+    def add(w)
+      @widgets << w
+    end
+    
+    
+    # draw all widgets on screen
+    def draw(con=IO.console)
+      con.erase_screen(2)
+      
+      for w in @widgets
+        w.draw(con)
+      end
+      
+    end
+    
+  end
+  
+  
+  
+  class Box
+
+    def initialize(line=0,column=0,height=0,width=0)
+      @line = line
+      @column = column
+      @height = height
+      @width = width
+    end
+
+
+    
+    # returns string of box top
+    def box_top
+      out = ","
+      out += "-" * (@width-2)
+      out += "."
+      
+      return out
+    end
+    
+    def box_left
+      return "|"
+    end
+    
+    def box_right
+      return "|"
+    end
+    
+    def box_middle
+      out = box_left
+      out += " " * (@width-2)
+      out += box_right
+      return out
+    end
+    
+    def box_bottom
+      out = "'"
+      out += "-" * (@width-2)
+      out += "'"
+      return out
+    end
+    
+    
+    #
+    def box_array
+      out = []
+      out << box_top
+      for n in (0..@height-3)
+        out << box_middle
+      end
+      out << box_bottom
+      return out
+    end
+    
+    # draws widget onto console
+    def draw(con=IO.console)
+      con.goto(@line,@column)
+      
+      for n in box_array
+        con.goto_column(@column)
+        con.puts(n)
+        
+      end
+    end
+  end
+end
+
+scn = UI::Screen.new
+
+
+b1 = UI::Box.new(0,0,10,10)
+scn.add(b1)
+
+
+#b2 = UI::Box.new(0,0,10,25)
+#scn.add(b2)
+
+
+#b2.draw
+
+
+scn.draw
+
+loop {}
